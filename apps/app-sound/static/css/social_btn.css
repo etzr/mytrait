@@ -1,0 +1,41 @@
+.btn-facebook {
+    color: #fff;
+    background-color: #3b5998;
+    border-color: rgba(0,0,0,0.2);
+}
+
+.btn-google {
+    color: #fff;
+    background-color: #EA4335;
+    border-color: rgba(0,0,0,0.2);
+}
+
+.btn-social {
+    position: relative;
+    padding-left: 120px;
+    padding-top:20px;
+    padding-bottom:20px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 3em;
+}
+
+.btn-social:hover {
+    color: #eee;
+}
+
+.btn-social :first-child {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 100px;
+    padding: 7px;
+    padding-top:20px;
+    padding-bottom:20px;
+    font-size: 1.6em;
+    text-align: center;
+    border-right: 2px solid rgba(0,0,0,0.2);
+}

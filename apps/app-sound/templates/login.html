@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}
+{% block header %}
+    <title>Pitch Perfect</title>
+
+
+    <style>
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+        .buttons-wrap {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container center">
+        <div class="buttons-wrap">
+            <a class="btn btn-lg btn-social btn-google" id="gg-login">
+                <i class="fa fa-google"></i> Sign in with Google
+            </a>     
+            <br>
+            <a class="btn btn-lg btn-social btn-facebook" id="fb-login">
+                <i class="fa fa-facebook fa-fw"></i> Sign in with Facebook
+            </a>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $("#fb-login").click(function() {
+                window.location.href = "{{url_for('fb_login')}}"
+            });
+            $("#gg-login").click(function() {
+                window.location.href = "{{url_for('gg_login')}}"
+            });
+        });
+    </script>
+{% endblock %}

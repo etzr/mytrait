@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+{% block header %}
+	<title>{{name}}'s Profile</title>
+{% endblock %}
+
+{% block body %}
+
+<div class="card">
+	<div class="card-body">
+		<h1>
+			Hi <b>{{name}}</b>
+		</h1>
+	</div>
+</div>
+
+<hr>
+
+<div class="container" style="text-align: center">
+	{% if login_choice == "fb" %}
+    <a class="btn btn-lg btn-social btn-facebook" id="fb-remove-app" href="{{url_for('remove_app')}}">
+        <i class="fa fa-facebook fa-fw"></i> Unlink Facebook
+    </a>
+    {% endif %}
+
+    {% if login_choice == "gg" %}
+    <a class="btn btn-lg btn-social btn-google" id="gg-remove-app" href="{{url_for('remove_app')}}">
+        <i class="fab fa-google"></i></i> Unlink Google
+    </a>
+    {% endif %}
+</div>
+{% endblock %}
