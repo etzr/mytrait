@@ -138,6 +138,9 @@
 
     <script type="text/javascript">
         window.attempt = 0
+        window.get_new_note = true
+        window.score_user = false
+
         window.current_attempt = -1
 
         window.max_attempt = 10
@@ -154,7 +157,7 @@
             $("li").removeClass("correct");
             $("li").removeClass("select");
 
-            if (window.attempt != window.current_attempt) {
+            if (window.get_new_note) {
               difficulty = window.attempt / window.max_attempt + 1
               url = `{{url_for('api_get_note')}}?difficulty=${difficulty}&num=1`
               $.get(url, function(response) {
@@ -162,7 +165,8 @@
                     window.correct_note=response['notes'][0]
                     play_file(window.file);
 
-                    window.current_attempt += 1
+                    window.get_new_note = false
+                    window.score_user = true
               })
             } else {
                 play_file(window.file);
@@ -170,46 +174,50 @@
         }
 
         // tabulate score and show what was selected vs correct note
-        function get_score(key) {        
-            window.attempt += 1
+        function get_score(key) {
+            if (window.get_new_note != true & window.score_user)  {
+                window.attempt += 1
+                window.get_new_note = true
+                window.score_user = false
 
-            // just incase submission of score and redirection takes long
-            if (window.attempt >= window.max_attempt) {
-                $("#play").addClass("disabled")
-                $("#play").prop("onclick", null).off("click")
-            }
-
-            correct_note_encode = window.correct_note.replace(/#/g, '%23');
-            correct_note_element_id = window.correct_note.replace(/#/g, 's');
-            guessed_note_encode = key.replace('s', '%23');
-
-            $("#"+correct_note_element_id).addClass("correct");
-            $("#"+key).addClass("select");
-
-            url = `{{url_for('api_get_score')}}?correct_note=${correct_note_encode}&guessed_note=${guessed_note_encode}`
-            $.get(url, function(response) {
-                score=response['score']
-                window.scores.push(score)
-
-                // update progress bar
-                perc = window.attempt / window.max_attempt * 100
-                $("#pb").attr("style", `width: ${perc}%`)
-                $("#pb").attr("aria-valuenow", `${perc}%`)
-
-                // submit score and redirect to next level when max attempts reached
+                // just incase submission of score and redirection takes long
                 if (window.attempt >= window.max_attempt) {
-                    post_url = "{{url_for('api_submit_scores')}}";
-                    $.ajax({
-                        type: "POST",
-                        url: post_url, 
-                        data: JSON.stringify({"listen": {"1": window.scores}}), 
-                        contentType: 'application/json',
-                        success: function() {
-                            window.location.replace("{{url_for('level2')}}");
-                        }
-                    });                    
+                    $("#play").addClass("disabled")
+                    $("#play").prop("onclick", null).off("click")
                 }
-            })
+
+                correct_note_encode = window.correct_note.replace(/#/g, '%23');
+                correct_note_element_id = window.correct_note.replace(/#/g, 's');
+                guessed_note_encode = key.replace('s', '%23');
+
+                $("#"+correct_note_element_id).addClass("correct");
+                $("#"+key).addClass("select");
+
+                url = `{{url_for('api_get_score')}}?correct_note=${correct_note_encode}&guessed_note=${guessed_note_encode}`
+                $.get(url, function(response) {
+                    score=response['score']
+                    window.scores.push(score)
+
+                    // update progress bar
+                    perc = window.attempt / window.max_attempt * 100
+                    $("#pb").attr("style", `width: ${perc}%`)
+                    $("#pb").attr("aria-valuenow", `${perc}%`)
+
+                    // submit score and redirect to next level when max attempts reached
+                    if (window.attempt >= window.max_attempt) {
+                        post_url = "{{url_for('api_submit_scores')}}";
+                        $.ajax({
+                            type: "POST",
+                            url: post_url, 
+                            data: JSON.stringify({"listen": {"1": window.scores}}), 
+                            contentType: 'application/json',
+                            success: function() {
+                                window.location.replace("{{url_for('level2')}}");
+                            }
+                        });                    
+                    }
+                })
+            }
         }        
     </script>
 {% endblock %}
