@@ -245,7 +245,7 @@ def api_get_note():
 
     numOfNotes = int(request.args.get('num', 1))
 
-    ll = max([C5_IDX - difficulty, LL_MIN])
+    ll = 0
     ul = min([C5_IDX + difficulty, UL_MAX])
 
     if ll != ul:
