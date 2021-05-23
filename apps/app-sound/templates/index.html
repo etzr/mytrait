@@ -1,8 +1,66 @@
 {% extends 'layout.html' %}
 {% block header %}
-	<title>Pitch Perfect</title>
+    <title>Pitch Perfect</title>
+    <style>
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;    
+            text-align: center;
+            height: 100%;
+        }
+        .buttons-wrap {
+            display: flex;
+            flex-direction: column;
+        }
+        .disabled {
+          background-color: #979c99;
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
-	
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    
+    <div class="container center">
+        <div class="buttons-wrap">
+            <h1 style="font-size:10em">
+                <i class="fas fa-assistive-listening-systems"></i>
+            </h1>
+            <span style="font-size:3em" id="instruction">
+                You will be tested on <b>3 levels</b> to determine how <b>Pitch Perfect</b> you are.
+            </span>   
+            <div style="height:30vh"></div>
+            <button type="button" id="start_btn" class="btn btn-success" style="font-size:5em" onclick="countdown()">Start</button>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function play_file(file) {
+            file_path = 'static/audio/notes/' + file
+            var audio = new Audio(file_path);
+            audio.play();
+        }
+
+        function countdown() {
+            $("#instruction").html("You are now hearing the Middle C (C5)")
+            play_file("60.wav");
+            
+            $("#start_btn").addClass("disabled")
+            $("#start_btn").prop("onclick", null).off("click")
+
+            var time = 4;
+            var interval = setInterval(function() { 
+                if (time > 0) {      
+                    $("#start_btn").html(time);      
+                    time = time - 1;
+                }
+                else { 
+                    window.location.replace("{{url_for('level1')}}");
+                }
+            }, 1000);
+        }
+    </script>
 {% endblock %}

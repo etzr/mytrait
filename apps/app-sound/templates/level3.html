@@ -1,0 +1,250 @@
+{% extends 'layout.html' %}
+{% block header %}
+    <title>Pitch Perfect - Lvl 2</title>
+    <style>
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;    
+            text-align: center;
+            height: 95%;
+        }
+        .buttons-wrap {
+            display: flex;
+            flex-direction: column;
+        }
+
+        ul {
+            height:18.875em;
+            width:34em;
+            margin:5em auto;
+            padding:3em 0 0 3em;
+            position:relative;
+            border:1px solid black;
+            border-radius:1em;
+            background:linear-gradient(to bottom right,rgba(0,0,0,0.3),rgba(1,1,1,1));
+            box-shadow:0 0 50px rgba(0,0,0,0.5) inset,0 1px rgba(212,152,125,0.2) inset,0 5px 15px rgba(0,0,0,0.5)
+        }
+
+        li {
+            margin:0;
+            padding:0;
+            list-style:none;
+            position:relative;
+            float:left
+        }
+
+        ul .white {
+            height:16em;
+            width:4em;
+            z-index:1;
+            border-left:1px solid #bbb;
+            border-bottom:1px solid #bbb;
+            border-radius:0 0 5px 5px;
+            box-shadow:-1px 0 0 rgba(255,255,255,0.8) inset,0 0 5px #ccc inset,0 0 3px rgba(0,0,0,0.2);
+            background:linear-gradient(to bottom,#eee 0%,#fff 100%)
+        }
+
+        ul .white:active {
+            border-top:1px solid #777;
+            border-left:1px solid #999;
+            border-bottom:1px solid #999;
+            box-shadow:2px 0 3px rgba(0,0,0,0.1) inset,-5px 5px 20px rgba(0,0,0,0.2) inset,0 0 3px rgba(0,0,0,0.2);
+            background:linear-gradient(to bottom,#fff 0%,#e9e9e9 100%)
+        }
+
+        .black {
+            height:8em;
+            width:2em;
+            margin:0 0 0 -1em;
+            z-index:2;
+            border:1px solid #000;
+            border-radius:0 0 3px 3px;
+            box-shadow:-1px -1px 2px rgba(255,255,255,0.2) inset,0 -5px 2px 3px rgba(0,0,0,0.6) inset,0 2px 4px rgba(0,0,0,0.5);
+            background:linear-gradient(45deg,#222 0%,#555 100%)
+        }
+
+        .black:active {
+            box-shadow:-1px -1px 2px rgba(255,255,255,0.2) inset,0 -2px 2px 3px rgba(0,0,0,0.6) inset,0 1px 2px rgba(0,0,0,0.5);
+            background:linear-gradient(to right,#444 0%,#222 100%)
+        }
+
+        .a,.g,.f,.d,.c {
+            margin:0 0 0 -1em
+        }
+
+        ul li:first-child {
+            border-radius:5px 0 5px 5px
+        }
+
+        ul li:last-child {
+            border-radius:0 5px 5px 5px
+        }
+
+        .white.select, .black.select {
+            border: 3px solid #a10dbf;
+        }
+        .black.correct {
+            background: linear-gradient(45deg,#41964b 0%,#364738 100%)
+        }
+        .white.correct {
+            background: linear-gradient(to bottom,#41964b 0%,#1da32d 100%)
+        }
+
+        #next {
+            display: none;
+        }
+
+        .disabled {
+            background-color: #979c99;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="progress">
+        <div id="pb" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+
+    <div class="container center">
+        <div class="buttons-wrap">
+            <div class="card" style="font-size: 2.5em; text-align: left">
+                <ol>
+                    <li>1) Press "Play" to hear <b>3</b> Tones.</li>
+                    <li>2) Guess the Notes (Press the Keys)</li>
+                    <li>3) Press "Evaluate"</li>
+                </ol>
+            </div>
+
+            <br>
+            <button type="button" id="play" class="btn btn-success" style="font-size:5em" onclick="play_note()">Play</button>
+
+            <div class="piano">
+                <ul class="set">
+                    <li id="C" class="white c" onclick="toggle_key(this.id)"></li>
+                    <li id="Cs" class="black ds" onclick="toggle_key(this.id)"></li>
+                    <li id="D" class="white d" onclick="toggle_key(this.id)"></li>
+                    <li id="Ds" class="black cs" onclick="toggle_key(this.id)"></li>
+                    <li id="E" class="white c" onclick="toggle_key(this.id)"></li>
+                    <li id="F" class="white b" onclick="toggle_key(this.id)"></li>
+                    <li id="Fs" class="black as" onclick="toggle_key(this.id)"></li>
+                    <li id="G" class="white a" onclick="toggle_key(this.id)"></li>
+                    <li id="Gs" class="black gs" onclick="toggle_key(this.id)"></li>
+                    <li id="A" class="white g" onclick="toggle_key(this.id)"></li>
+                    <li id="As" class="black fs" onclick="toggle_key(this.id)"></li>
+                    <li id="B" class="white f" onclick="toggle_key(this.id)"></li>
+                </ul>
+            </div>
+
+            <br>
+            <button type="button" id="evaluate" class="btn btn-dark" style="font-size:3em" onclick="evaluate_keys()">Evaluate</button>
+        </div>
+    </div>
+
+    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.1/howler.min.js" integrity="sha512-L6Z/YtIPQ7eU3BProP34WGU5yIRk7tNHk7vaC2dB1Vy1atz6wl9mCkTPPZ2Rn1qPr+vY2mZ9odZLdGYuaBk7dQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript">
+        window.attempt = 0
+        window.new_sound = true
+        window.evaluated = false
+
+        window.max_attempt = 3
+        window.scores = []
+
+        function play_files(files) {
+            sounds = []
+            $.each(files, function(i, file) {
+                var sound = new Howl({
+                    src: ['static/audio/notes/' + file]
+                })
+                sounds.push(sound)
+            }); 
+            $.each(sounds, function(i, sound) {
+                sound.play()
+            });
+        }
+
+        // play random note with increasing difficulty
+        function play_note() {
+
+            if (window.new_sound) {
+              url = `{{url_for('api_get_note')}}?difficulty=1.5&num=3`
+              $.get(url, function(response) {
+                    $("li").removeClass("correct");
+                    $("li").removeClass("select");
+
+                    window.correct_notes=response['notes']
+                    window.files=response['files']
+                    play_files(window.files)
+
+                    window.new_sound = false
+                    window.evaluated = false
+              })
+            } else {
+                play_files(window.files)
+            }
+        }
+
+        // highlight selected keys
+        function toggle_key(key) {
+            if ($("#"+key).hasClass('select')) {
+                $("#"+key).removeClass('select')
+            } else {
+                $("#"+key).addClass('select')
+            }
+        }
+
+        // evaluate
+        function evaluate_keys() {
+            var selected = $(".select").map(function() {
+                idx_encode = this.id.replace('s', '#');
+                return idx_encode;
+            }).get();
+
+            $.each(window.correct_notes, function(i, correct_note) {
+                correct_note_element_id = correct_note.replace(/#/g, 's');
+                $("#"+correct_note_element_id).addClass("correct")
+            })
+
+            post_url = "{{url_for('api_post_multi_score')}}";
+
+            if ((window.new_sound != true) & (window.evaluated != true) & (selected.length >= 1)) {
+                window.evaluated = true
+                window.new_sound = true
+                window.attempt += 1
+
+                // update progress bar
+                perc = window.attempt / window.max_attempt * 100
+                $("#pb").attr("style", `width: ${perc}%`)
+                $("#pb").attr("aria-valuenow", `${perc}%`)
+
+                $.ajax({
+                    type: "POST",
+                    url: post_url, 
+                    data: JSON.stringify({
+                        "correct_notes": window.correct_notes, 
+                        "guessed_notes": selected}), 
+                    contentType: 'application/json',
+                    success: function(resp){
+                        window.scores.push(resp['score'])
+
+                        // submit all scores when max attempts reached
+                        if (window.scores.length >= window.max_attempt) {
+                            post_url = "{{url_for('api_submit_scores')}}";
+                            $.ajax({
+                                type: "POST",
+                                url: post_url, 
+                                data: JSON.stringify({"listen": {"3": window.scores}}), 
+                                contentType: 'application/json',
+                                success: function() {
+                                    window.location.replace("{{url_for('report')}}");
+                                }
+                            });                
+                        }
+                    }
+                });
+            };            
+        }
+    </script>
+{% endblock %}

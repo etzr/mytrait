@@ -7,13 +7,36 @@
 
 <div class="card">
 	<div class="card-body">
-		<h1>
-			Hi <b>{{name}}</b>
-		</h1>
+        <br>
+        <br>
+        <br>
+		<h1>Hi <b>{{name}}</b></h1>
+        <br>
+        <br>
+        <br>
+        <table class="table" style="font-size: 3em">
+        <thead>
+            <tr>
+                <th scope="col">Level 1</th>
+                <th scope="col">Level 2</th>
+                <th scope="col">Level 3</th>
+                <th scope="col">Overall</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{scores["Level 1"]}}</td>
+                <td>{{scores["Level 2"]}}</td>
+                <td>{{scores["Level 3"]}}</td>
+                <td>{{overall_score}}</td>
+            </tr>
+        </tbody>
+    </table>
 	</div>
 </div>
-
-<hr>
+<br>
+<br>
+<br>
 
 <div class="container" style="text-align: center">
 	{% if login_choice == "fb" %}

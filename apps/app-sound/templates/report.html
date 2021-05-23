@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+{% block header %}
+    <title>Pitch Perfect</title>
+    <style>
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;    
+            text-align: center;
+            height: 100%;
+        }
+        .buttons-wrap {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class='center'>
+        <div class="card" style="width: 80%;">
+            <img class="card-img-top" src="{{ static_autoversion(image) }}" alt="{{evaluation}}">
+            <div class="card-body">
+                <h1 class="card-title">You are {{evaluation}}</h1>
+                <p class="card-text">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Level 1</th>
+                                <th scope="col">Level 2</th>
+                                <th scope="col">Level 3</th>
+                                <th scope="col">Overall</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{scores["Level 1"]}}</td>
+                                <td>{{scores["Level 2"]}}</td>
+                                <td>{{scores["Level 3"]}}</td>
+                                <td>{{overall_score}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </p>
+                <a href="{{url_for('index')}}" class="btn btn-primary" style="font-size: 3em">Try Again</a>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}
