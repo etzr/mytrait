@@ -168,7 +168,7 @@ def remove_app():
 def index():
     if session.get('login-choice') == 'gg':
         resp = google.get("/oauth2/v1/userinfo")
-        """in case user removed app from facebook, but session still cached as facebook.authorized == True"""
+        """in case user removed app from google, but session still cached as google.authorized == True"""
         if google.authorized and not resp.ok:
             return redirect(url_for("gg_login"))
 
@@ -314,9 +314,18 @@ def api_submit_scores():
     session['scores'] = update(session['scores'], request.json)
     return jsonify({"status": "submitted"})
 
-@app.route("/api/report_score")
-def api_report_score():
-    return jsonify(session.get('scores', {}))
+@app.route("/api/<social>/user_details")
+def api_user_details(social):
+    if social == 'fb':
+        resp = facebook.get("/{}?fields=location".format(session['user_id']))
+        return jsonify(resp.json())
+    if social == 'gg':
+        resp = google.get("/oauth2/v1/userinfo")
+        return jsonify(resp.json())
+
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=DEBUG, ssl_context='adhoc')
