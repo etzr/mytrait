@@ -31,6 +31,20 @@
         .center { 
             justify-content: center; 
         }
+        .start {
+            justify-content: flex-start;
+        }
+
+        .numberCircle {
+            width: 50px;
+            line-height: 50px;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 32px;
+            color: white;
+            background-color: #00a2ff;
+        }
+
         .disabled {
             background-color: #979c99;
         }
@@ -45,14 +59,38 @@
 
         <div class="row content"> 
             <div class="flex-container-row center">
-                <div class="flex-container-column center" style="padding-left: 50px; padding-right: 50px"> 
+                <div class="flex-container-column start" style="padding-left: 50px; padding-right: 50px"> 
                     <h1 style="font-size:20em; text-align: center">
-                        <i class="fas fa-assistive-listening-systems"></i>
+                        <i class="fas fa-headphones-alt"></i>
                     </h1>
 
-                    <span style="font-size:3em; text-align: center" id="instruction">
-                        You will be tested on <b>3 levels</b> to determine how <b>Pitch Perfect</b> you are.
-                    </span>   
+                    <div class="instruction" id="instruction">
+                        <table style="width:100%">
+                            <tr>
+                                <td><div class="numberCircle">1</div></td>
+                                <td><div style="width:50px"></div></td>
+                                <td><div style="font-size:3em; text-align: left">
+                                        Plug-in your Headphones
+                                </div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="numberCircle">2</div></td>
+                                <td><div style="width:50px"></div></td>
+                                <td><div style="font-size:3em; text-align: left">
+                                        Click Start
+                                </div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="numberCircle">3</div></td>
+                                <td><div style="width:50px"></div></td>
+                                <td><div style="font-size:3em; text-align: left">
+                                        Go through <b>3</b> Levels
+                                </div></td>
+                            </tr>
+                        </table>                        
+                    </div>
+
+                      
                     <div style="height: 100px"></div>
                     <button type="button" id="start_btn" class="btn btn-success" style="font-size:5em" onclick="countdown()">Start</button>
                 </div>
@@ -91,7 +129,7 @@
             files = ['60.wav', '60.wav', '72.wav', '84.wav']
             play_files(files)
             
-            $("#instruction").html("You are now hearing the C Note")
+            $("#instruction").html('<div style="font-size:3em; text-align: left">You are now hearing the C Note</div>')
 
             $("#start_btn").addClass("disabled")
             $("#start_btn").prop("onclick", null).off("click")
