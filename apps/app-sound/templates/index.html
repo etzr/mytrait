@@ -99,35 +99,21 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.1/howler.min.js" integrity="sha512-L6Z/YtIPQ7eU3BProP34WGU5yIRk7tNHk7vaC2dB1Vy1atz6wl9mCkTPPZ2Rn1qPr+vY2mZ9odZLdGYuaBk7dQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script type="text/javascript">        
-        function play_files(files) {
-            sounds = []
-            $.each(files, function(i, file) {
-                var sound = new Howl({
-                    src: ['static/audio/notes/' + file]
-                })
-                sounds.push(sound)
-            });
-
-            var interval = setInterval(function() { 
-                ready = 0
-                $.each(sounds, function(i, sound) {
-                    if (sound.state() == 'loaded') {
-                        ready += 1
-                    }
-                });
-                if (ready == sounds.length) {
-                    clearInterval(interval)
-                    $.each(sounds, function(i, sound) {
-                        sound.play()
-                    })
-                }
-            }, 1)
-        }
+    <script type="text/javascript">
+        var c5 = new Howl({
+            src: ['static/audio/notes/60.wav']
+        })       
+        var c6 = new Howl({
+            src: ['static/audio/notes/72.wav']
+        })       
+        var c7 = new Howl({
+            src: ['static/audio/notes/84.wav']
+        })       
 
         function countdown() {
-            files = ['60.wav', '60.wav', '72.wav', '84.wav']
-            play_files(files)
+            c5.play()
+            c6.play()
+            c7.play()
             
             $("#instruction").html('<div style="font-size:3em; text-align: left">You are now hearing the C Note</div>')
 
