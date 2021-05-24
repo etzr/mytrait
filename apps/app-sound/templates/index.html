@@ -1,42 +1,64 @@
 {% extends 'layout.html' %}
 {% block header %}
     <title>Pitch Perfect</title>
-    <style>
-        .center {
+    <style>    
+        .flex-container-column {
             display: flex;
-            justify-content: center;
-            align-items: center;    
-            text-align: center;
+            flex-flow: column nowrap;
             height: 100%;
+            margin: 0;
+            padding:0;
         }
-        .buttons-wrap {
+        .flex-container-row {
             display: flex;
-            flex-direction: column;
+            flex-flow: row nowrap;
+            width: 100%;
+            margin: 0;
+            padding:0;
+        }
+
+        .row.progress {
+            order: 1;
+            flex-grow: 0;
+            margin: 0;
+        }
+        .row.content {
+            order: 2;
+            flex-grow: 1;
+            margin: 0;
+        }
+
+        .center { 
+            justify-content: center; 
         }
         .disabled {
-          background-color: #979c99;
+            background-color: #979c99;
         }
     </style>
 {% endblock %}
 
 {% block body %}
-    <div class="progress">
-        <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-    </div>
-    
-    <div class="container center">
-        <div class="buttons-wrap">
-            <h1 style="font-size:10em">
-                <i class="fas fa-assistive-listening-systems"></i>
-            </h1>
-            <span style="font-size:3em" id="instruction">
-                You will be tested on <b>3 levels</b> to determine how <b>Pitch Perfect</b> you are.
-            </span>   
-            <div style="height:30vh"></div>
-            <button type="button" id="start_btn" class="btn btn-success" style="font-size:5em" onclick="countdown()">Start</button>
+    <div class="flex-container-column">
+        <div class="row progress">
+            <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
-    </div>
 
+        <div class="row content"> 
+            <div class="flex-container-row center">
+                <div class="flex-container-column center" style="padding-left: 50px; padding-right: 50px"> 
+                    <h1 style="font-size:20em; text-align: center">
+                        <i class="fas fa-assistive-listening-systems"></i>
+                    </h1>
+
+                    <span style="font-size:3em; text-align: center" id="instruction">
+                        You will be tested on <b>3 levels</b> to determine how <b>Pitch Perfect</b> you are.
+                    </span>   
+                    <div style="height: 100px"></div>
+                    <button type="button" id="start_btn" class="btn btn-success" style="font-size:5em" onclick="countdown()">Start</button>
+                </div>
+            </div>
+        </div>  
+    </div>
     <script type="text/javascript">
         function play_file(file) {
             file_path = 'static/audio/notes/' + file

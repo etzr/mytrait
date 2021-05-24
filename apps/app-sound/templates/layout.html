@@ -10,33 +10,60 @@
 
 
 		<link rel="stylesheet" type="text/css" href="{{ static_autoversion('css/social_btn.css') }}">
-
+		<style>
+			body {
+				margin: 0px;
+				padding: 0px;
+				height: 100vh;
+				width: 100vw;
+			}
+			.flex-template-container {
+            	display: flex;
+				flex-direction: column;
+            	height: 100%;
+	            margin: 0;
+	            padding:0;
+			}
+			.flex-template-item1 {
+				order: 1;
+            	flex-grow: 0;
+            	margin: 0;
+			}
+			.flex-template-item2 {
+				order: 2;
+            	flex-grow: 1;
+            	margin: 0;
+			}
+			.navbar-brand {
+				font-size: 30px;
+			}
+		</style>
 		{% block header %}
 		{% endblock %}
 	</head>
 
-	<body style="height:100vh; width: 100vw;">
-		<!-- NAVBAR -->
-		<nav class="navbar navbar-expand-md navbar-light bg-light" style="height:5vh;margin:0px;padding-left:10px;padding-right:10px;padding-top: 10px;padding-bottom: 10px">
-			<div class="navbar-brand" style="height:5vh;padding:10px;">
-				<a href="#" style="height:5vh;margin:0px;padding:10px;font-size:2vh">
-					<img src="{{ static_autoversion('img/icon.svg') }}" height="100%" alt="">
-				</a>
-				<a href="{{url_for('index')}}" style="height:5vh;margin:0px;padding:10px;font-size:2vh;color:inherit;text-decoration: none;"> 
-					<span>
+	<body>
+		<div class="flex-template-container">
+			<div class="flex-template-item1">
+				<!-- NAVBAR -->
+				<nav id="nb" class="navbar navbar-expand-lg navbar-light bg-light py-0">
+					<a class="navbar-brand" href="#">
+						<img src="{{ static_autoversion('img/icon.svg') }}" width="100" height="100" class="d-inline-block align-top" alt="APT. logo">
+					</a>
+					<a class="navbar-brand" href="{{url_for('index')}}" > 
 						Perfect Pitch - {{level}}
-					</span>
-				</a>
+					</a>
+
+					<button type="button" class="navbar-brand btn btn-light btn-lg ml-auto" onclick="profile()">
+						<i class="fas fa-user"></i>
+					</button>
+				</nav>
 			</div>
 
-			<button type="button" class="btn btn-light btn-lg ml-auto" style="height:5vh;font-size:2vh" onclick="profile()">
-				<i class="fas fa-user"></i>
-			</button>
-		</nav>
-
-		<div style="height:95vh">
-			{% block body %}
-			{% endblock %}			
+			<div class="flex-template-item2">
+				{% block body %}
+				{% endblock %}			
+			</div>
 		</div>
 	</body>
 

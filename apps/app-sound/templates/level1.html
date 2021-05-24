@@ -2,18 +2,40 @@
 {% block header %}
     <title>Pitch Perfect - Lvl 1</title>
     <style>
-        .center {
+        .flex-container-column {
             display: flex;
-            justify-content: center;
-            align-items: center;    
-            text-align: center;
-            height: 50%;
+            flex-flow: column nowrap;
+            height: 100%;
+            margin: 0;
+            padding:0;
         }
-        .buttons-wrap {
+        .flex-container-row {
             display: flex;
-            flex-direction: column;
+            flex-flow: row nowrap;
+            width: 100%;
+            margin: 0;
+            padding:0;
         }
 
+        .row.progress {
+            order: 1;
+            flex-grow: 0;
+            margin: 0;
+        }
+        .row.content {
+            order: 2;
+            flex-grow: 1;
+            margin: 0;
+        }
+
+        .center { 
+            justify-content: center; 
+        }
+        .disabled {
+            background-color: #979c99;
+        }
+
+        /*PIANO STUFF*/
         ul {
             height:18.875em;
             width:34em;
@@ -90,51 +112,47 @@
         .white.correct {
             background: linear-gradient(to bottom,#41964b 0%,#1da32d 100%)
         }
-
-        #next {
-            display: none;
-        }
-
-        .disabled {
-            background-color: #979c99;
-        }
     </style>
 {% endblock %}
 
 {% block body %}
-    <div class="progress">
-        <div id="pb" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-    </div>
-
-    <div class="container center">
-        <div class="buttons-wrap">
-            <div class="card" style="font-size: 2.5em; text-align: left">
-                <ol>
-                    <li>1) Press "Play" to hear the tone.</li>
-                    <li>2) Guess the Note (Press the Key)</li>
-                </ol>
-            </div>
-            <br>
-            <button type="button" id="play" class="btn btn-success" style="font-size:5em" onclick="play_note()">Play</button>
+    <div class="flex-container-column">
+        <div class="row progress">
+            <div class="progress-bar" role="progressbar" style="width: 33%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
-    </div>
 
-    <div class="piano">
-        <ul class="set">
-            <li id="C" class="white c" onclick="get_score(this.id)"></li>
-            <li id="Cs" class="black ds" onclick="get_score(this.id)"></li>
-            <li id="D" class="white d" onclick="get_score(this.id)"></li>
-            <li id="Ds" class="black cs" onclick="get_score(this.id)"></li>
-            <li id="E" class="white c" onclick="get_score(this.id)"></li>
-            <li id="F" class="white b" onclick="get_score(this.id)"></li>
-            <li id="Fs" class="black as" onclick="get_score(this.id)"></li>
-            <li id="G" class="white a" onclick="get_score(this.id)"></li>
-            <li id="Gs" class="black gs" onclick="get_score(this.id)"></li>
-            <li id="A" class="white g" onclick="get_score(this.id)"></li>
-            <li id="As" class="black fs" onclick="get_score(this.id)"></li>
-            <li id="B" class="white f" onclick="get_score(this.id)"></li>
-        </ul>
+        <div class="row content"> 
+            <div class="flex-container-row center">
+                <div class="flex-container-column center" style="padding-left: 50px; padding-right: 50px">
+                    <div class="card" style="font-size: 2.5em; text-align: left">
+                        <ol>
+                            <li>1) Press "Play" to hear the tone.</li>
+                            <li>2) Guess the Note (Press the Key)</li>
+                        </ol>
+                    </div>
+                    <button type="button" id="play" class="btn btn-success" style="font-size:5em" onclick="play_note()">Play</button>
+                    <div class="piano">
+                        <ul class="set">
+                            <li id="C" class="white c" onclick="get_score(this.id)"></li>
+                            <li id="Cs" class="black ds" onclick="get_score(this.id)"></li>
+                            <li id="D" class="white d" onclick="get_score(this.id)"></li>
+                            <li id="Ds" class="black cs" onclick="get_score(this.id)"></li>
+                            <li id="E" class="white c" onclick="get_score(this.id)"></li>
+                            <li id="F" class="white b" onclick="get_score(this.id)"></li>
+                            <li id="Fs" class="black as" onclick="get_score(this.id)"></li>
+                            <li id="G" class="white a" onclick="get_score(this.id)"></li>
+                            <li id="Gs" class="black gs" onclick="get_score(this.id)"></li>
+                            <li id="A" class="white g" onclick="get_score(this.id)"></li>
+                            <li id="As" class="black fs" onclick="get_score(this.id)"></li>
+                            <li id="B" class="white f" onclick="get_score(this.id)"></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div> 
     </div>
+    
 
     <script type="text/javascript">
         window.attempt = 0
