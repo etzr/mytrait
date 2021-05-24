@@ -59,17 +59,40 @@
             </div>
         </div>  
     </div>
-    <script type="text/javascript">
-        function play_file(file) {
-            file_path = 'static/audio/notes/' + file
-            var audio = new Audio(file_path);
-            audio.play();
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.1/howler.min.js" integrity="sha512-L6Z/YtIPQ7eU3BProP34WGU5yIRk7tNHk7vaC2dB1Vy1atz6wl9mCkTPPZ2Rn1qPr+vY2mZ9odZLdGYuaBk7dQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript">        
+        function play_files(files) {
+            sounds = []
+            $.each(files, function(i, file) {
+                var sound = new Howl({
+                    src: ['static/audio/notes/' + file]
+                })
+                sounds.push(sound)
+            });
+
+            var interval = setInterval(function() { 
+                ready = 0
+                $.each(sounds, function(i, sound) {
+                    if (sound.state() == 'loaded') {
+                        ready += 1
+                    }
+                });
+                if (ready == sounds.length) {
+                    clearInterval(interval)
+                    $.each(sounds, function(i, sound) {
+                        sound.play()
+                    })
+                }
+            }, 1)
         }
 
         function countdown() {
-            $("#instruction").html("You are now hearing the Middle C (C5)")
-            play_file("60.wav");
+            files = ['60.wav', '60.wav', '72.wav', '84.wav']
+            play_files(files)
             
+            $("#instruction").html("You are now hearing the C Note")
+
             $("#start_btn").addClass("disabled")
             $("#start_btn").prop("onclick", null).off("click")
 
@@ -82,7 +105,7 @@
                 else { 
                     window.location.replace("{{url_for('level1')}}");
                 }
-            }, 1000);
+            }, 1000); 
         }
     </script>
 {% endblock %}

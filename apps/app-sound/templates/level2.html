@@ -107,10 +107,10 @@
             border: 3px solid #a10dbf;
         }
         .black.correct {
-            background: linear-gradient(45deg,#41964b 0%,#364738 100%)
+            background: linear-gradient(45deg,#00fcb5 0%,#00b315 100%)
         }
         .white.correct {
-            background: linear-gradient(to bottom,#41964b 0%,#1da32d 100%)
+            background: linear-gradient(to bottom,#00fcb5 0%,#00b315 100%)
         }
     </style>
 {% endblock %}
@@ -118,21 +118,19 @@
 {% block body %}
     <div class="flex-container-column">
         <div class="row progress">
-            <div class="progress-bar" role="progressbar" style="width: 66%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            <div id="pb" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
 
         <div class="row content"> 
             <div class="flex-container-row center">
                 <div class="flex-container-column center" style="padding-left: 50px; padding-right: 50px">
 
-                    <div class="card" style="font-size: 2.5em; text-align: left">
-                        <ol>
-                            <li>1) Press "Play" to hear <b>2</b> Tones.</li>
-                            <li>2) Guess the Notes (Press the Keys)</li>
-                            <li>3) Press "Evaluate"</li>
-                        </ol>
+                    <div style="font-size: 2.5em; text-align: left">
+                        <span style="text-align: center"><b>Stage 2 of 3</b></span><br><br>
+                        <span>1) Press "Play" to hear <b>2</b> Tones.</span><br>
+                        <span>2) Guess the Notes (Press the Keys)</span><br>
+                        <span>3) Press "Evaluate"</span><br>
                     </div>
-
                     <br>
                     <button type="button" id="play" class="btn btn-success" style="font-size:5em" onclick="play_note()">Play</button>
 
@@ -178,10 +176,22 @@
                     src: ['static/audio/notes/' + file]
                 })
                 sounds.push(sound)
-            }); 
-            $.each(sounds, function(i, sound) {
-                sound.play()
             });
+
+            var interval = setInterval(function() { 
+                ready = 0
+                $.each(sounds, function(i, sound) {
+                    if (sound.state() == 'loaded') {
+                        ready += 1
+                    }
+                });
+                if (ready == sounds.length) {
+                    clearInterval(interval)
+                    $.each(sounds, function(i, sound) {
+                        sound.play()
+                    })
+                }
+            }, 1)
         }
 
         // play random note with increasing difficulty

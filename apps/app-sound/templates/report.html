@@ -23,18 +23,21 @@
         }
 
         /*children*/
-        .x-card-image {
-            order: 1;
-        }
         .x-card-title {
-            order: 2;
+            text-align: center;
+            font-size: 5em;
+        }
+        .x-card-desc {
+            font-size: 2.5em;
             text-align: center;
         }
+        .x-card-image {
+        }
         .x-card-table {
-            order: 3;
+            font-size: 1.5em;
+            text-align: center;
         }
         .x-card-btn {
-            order: 4;
         }
 
         .disabled {
@@ -46,9 +49,12 @@
 {% block body %}
 <div class="flex-container-row center">
     <div class="flex-container-column center">
+
+            <h1 class="x-card-title">{{evaluation}}</h1>
+
             <img class="x-card-image" src="{{ static_autoversion(image) }}" alt="{{evaluation}}">
 
-            <h1 class="x-card-title">You are {{evaluation}}</h1>
+            <span class="x-card-desc">You are in the <b><u>{{overall_score}}</u></b> of the population.</span><br>
 
             <table class="x-card-table table">
                 <thead>
@@ -56,7 +62,6 @@
                         <th scope="col">Level 1</th>
                         <th scope="col">Level 2</th>
                         <th scope="col">Level 3</th>
-                        <th scope="col">Overall</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,7 +69,6 @@
                         <td>{{scores["Level 1"]}}</td>
                         <td>{{scores["Level 2"]}}</td>
                         <td>{{scores["Level 3"]}}</td>
-                        <td>{{overall_score}}</td>
                     </tr>
                 </tbody>
             </table>

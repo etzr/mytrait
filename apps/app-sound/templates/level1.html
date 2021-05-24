@@ -107,10 +107,10 @@
             border: 3px solid #a10dbf;
         }
         .black.correct {
-            background: linear-gradient(45deg,#41964b 0%,#364738 100%)
+            background: linear-gradient(45deg,#00fcb5 0%,#00b315 100%)
         }
         .white.correct {
-            background: linear-gradient(to bottom,#41964b 0%,#1da32d 100%)
+            background: linear-gradient(to bottom,#00fcb5 0%,#00b315 100%)
         }
     </style>
 {% endblock %}
@@ -118,18 +118,18 @@
 {% block body %}
     <div class="flex-container-column">
         <div class="row progress">
-            <div class="progress-bar" role="progressbar" style="width: 33%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            <div id="pb" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
 
         <div class="row content"> 
             <div class="flex-container-row center">
                 <div class="flex-container-column center" style="padding-left: 50px; padding-right: 50px">
-                    <div class="card" style="font-size: 2.5em; text-align: left">
-                        <ol>
-                            <li>1) Press "Play" to hear the tone.</li>
-                            <li>2) Guess the Note (Press the Key)</li>
-                        </ol>
+                    <div style="font-size: 2.5em; text-align: left">
+                        <span style="text-align: center"><b>Stage 1 of 3</b></span><br><br>
+                        <span>1) Press "Play" to hear the tone.</span><br>
+                        <span>2) Guess the Note (Press the Key)</span><br>
                     </div>
+                    <br>
                     <button type="button" id="play" class="btn btn-success" style="font-size:5em" onclick="play_note()">Play</button>
                     <div class="piano">
                         <ul class="set">
@@ -153,7 +153,7 @@
         </div> 
     </div>
     
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.1/howler.min.js" integrity="sha512-L6Z/YtIPQ7eU3BProP34WGU5yIRk7tNHk7vaC2dB1Vy1atz6wl9mCkTPPZ2Rn1qPr+vY2mZ9odZLdGYuaBk7dQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="text/javascript">
         window.attempt = 0
         window.get_new_note = true
@@ -164,10 +164,29 @@
         window.max_attempt = 10
         window.scores = []
 
-        function play_file(file) {
-            file_path = 'static/audio/notes/' + file
-            var audio = new Audio(file_path);
-            audio.play();
+        function play_files(files) {
+            sounds = []
+            $.each(files, function(i, file) {
+                var sound = new Howl({
+                    src: ['static/audio/notes/' + file]
+                })
+                sounds.push(sound)
+            });
+
+            var interval = setInterval(function() { 
+                ready = 0
+                $.each(sounds, function(i, sound) {
+                    if (sound.state() == 'loaded') {
+                        ready += 1
+                    }
+                });
+                if (ready == sounds.length) {
+                    clearInterval(interval)
+                    $.each(sounds, function(i, sound) {
+                        sound.play()
+                    })
+                }
+            }, 1)
         }
 
         // play random note with increasing difficulty
@@ -181,13 +200,13 @@
               $.get(url, function(response) {
                     window.file=response['files'][0]
                     window.correct_note=response['notes'][0]
-                    play_file(window.file);
+                    play_files([window.file, window.file]);
 
                     window.get_new_note = false
                     window.score_user = true
               })
             } else {
-                play_file(window.file);
+                play_files([window.file, window.file]);
             }
         }
 

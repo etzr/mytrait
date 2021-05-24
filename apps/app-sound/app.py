@@ -186,19 +186,19 @@ def index():
         session['user_name'] = user_info['name']
         session['user_id'] = user_info['id']
 
-    return render_template('index.html', name=session.get('user_name', 'UNKNOWN'), level="Introduction")
+    return render_template('index.html', name=session.get('user_name', 'UNKNOWN'))
 
 @app.route("/level1")
 def level1():
-    return render_template('level1.html', name=session.get('user_name', 'UNKNOWN'), level="Level 1/3")
+    return render_template('level1.html', name=session.get('user_name', 'UNKNOWN'))
 
 @app.route("/level2")
 def level2():
-    return render_template('level2.html', name=session.get('user_name', 'UNKNOWN'), level="Level 2/3")
+    return render_template('level2.html', name=session.get('user_name', 'UNKNOWN'))
 
 @app.route("/level3")
 def level3():
-    return render_template('level3.html', name=session.get('user_name', 'UNKNOWN'), level="Final Level")
+    return render_template('level3.html', name=session.get('user_name', 'UNKNOWN'))
 
 @app.route("/report")
 def report():
@@ -214,7 +214,7 @@ def report():
     scores = update(default_score, session.get('scores', {}))['listen']
     agg_score = {"Level {}".format(k): round(np.mean(v)*100, 2) for k,v in scores.items()}
 
-    overall_score = agg_score['Level 1'] * 0.5 + agg_score['Level 2'] * 0.4 + agg_score['Level 3'] * 0.1
+    overall_score = round(agg_score['Level 1'] * 0.5 + agg_score['Level 2'] * 0.4 + agg_score['Level 3'] * 0.1, 2)
     evaluation = np.where(ranks_num > overall_score)[0]
     if len(evaluation) == 0:
         image = image[-1]
@@ -225,17 +225,16 @@ def report():
 
     return render_template(
         'report.html', 
-        name=session.get('user_name', 'UNKNOWN'), 
-        level="Report Card",
+        name=session.get('user_name', 'UNKNOWN'),
         evaluation=evaluation,
         scores={k: '{} %'.format(v) for k,v in agg_score.items()},
-        overall_score='{} %'.format(overall_score),
+        overall_score='{} percentile'.format(overall_score),
         image=image)
 
 ##############
 # API ROUTES #
 ##############
-C5_IDX = NOTES.index('60.wav')
+C5_IDX = NOTES.index('72.wav')
 LL_MIN = 0
 UL_MAX = len(NOTES)
 @app.route("/api/get_note")
@@ -245,7 +244,7 @@ def api_get_note():
 
     numOfNotes = int(request.args.get('num', 1))
 
-    ll = 0
+    ll = max([C5_IDX - difficulty, LL_MIN])
     ul = min([C5_IDX + difficulty, UL_MAX])
 
     if ll != ul:
